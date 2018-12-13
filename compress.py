@@ -9,6 +9,7 @@ import sys
 from PIL import Image
 
 def compressMe(file, verbose=False):
+	#seems like here is where I can detail where the directory I want, that is /originalImages, ought to be selected
 	filepath = os.path.join(os.getcwd(), file)
 	oldsize = os.stat(filepath).st_size
 	picture = Image.open(filepath)
@@ -18,6 +19,7 @@ def compressMe(file, verbose=False):
 	#I found that 85 has no difference in my 6-10mb files and that 65 is the lowest reasonable number
 	picture.save("Compressed_"+file,"JPEG",optimize=True,quality=85) 
 	
+	#change the "compressed_+file" to be something else if I want
 	newsize = os.stat(os.path.join(os.getcwd(),"Compressed_"+file)).st_size
 	percent = (oldsize-newsize)/float(oldsize)*100
 	if (verbose):
@@ -36,9 +38,11 @@ def main():
 
 	tot = 0
 	num = 0
+	#Seems like this is where it is looking initially? to run the process
 	for file in os.listdir(pwd):
 		if os.path.splitext(file)[1].lower() in ('.jpg', '.jpeg'):
 			num += 1
+			#this is running the compressMe function
 			tot += compressMe(file, verbose)
 	print "Average Compression: %d" % (float(tot)/num)
 	print "Done"
