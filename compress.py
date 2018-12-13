@@ -1,4 +1,5 @@
 #run this in any directory add -v for verbose 
+
 #get Pillow (fork of PIL) from pip before running --> pip install Pillow
 
 
@@ -17,7 +18,7 @@ def compressMe(file, verbose=False):
 	
 	#set quality= to the preferred quality. 
 	#I found that 85 has no difference in my 6-10mb files and that 65 is the lowest reasonable number
-	picture.save("Compressed_"+file,"JPEG",optimize=True,quality=85) 
+	picture.save("New_"+file,"JPEG",optimize=True,quality=85) 
 	
 	#change the "compressed_+file" to be something else if I want
 	newsize = os.stat(os.path.join(os.getcwd(),"Compressed_"+file)).st_size
