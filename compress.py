@@ -7,6 +7,7 @@
 
 import os
 import sys
+import math
 from PIL import Image
 
 def compressMe(file, verbose=False):
@@ -14,13 +15,32 @@ def compressMe(file, verbose=False):
 	filepath = os.path.join(os.getcwd(), 'originalFiles', file)
 	print("filepath " + filepath)
 	oldsize = os.stat(filepath).st_size
+
+	kb_size = oldsize/1000
+	max_kbs = 2000
+
+	print("kb size:", kb_size)
+	
+	
+
 	picture = Image.open(filepath)
-	dim = picture.size
+
+	if kb_size > max_kbs:
+		ratio = (max_kbs/kb_size)
+		print(kb_size)
+
+		quality = ratio * 100
+		print('quality should be the following')
+		print(quality)
+	else:
+		quality = 85
+		
+	#dim = picture.size
 	
 	#set quality= to the preferred quality. 
 	#I found that 85 has no difference in my 6-10mb files and that 65 is the lowest reasonable number
 	newPath = os.path.join(os.getcwd(), 'compressedFiles', 'compressed_' + file)
-	picture.save(newPath,"JPEG",optimize=True,quality=85) 
+	picture.save(newPath,"JPEG",optimize=True,quality=math.floor(quality)) 
 	
 	#change the "compressed_+file" to be something else if I want
 	newsize = os.stat(os.path.join(os.getcwd(),'originalFiles', file)).st_size
