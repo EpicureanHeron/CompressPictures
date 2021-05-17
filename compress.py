@@ -13,41 +13,42 @@ from PIL import Image
 def compressMe(file, verbose=False):
 	#seems like here is where I can detail where the directory I want, that is /originalImages, ought to be selected
 	filepath = os.path.join(os.getcwd(), 'originalFiles', file)
-	print("filepath " + filepath)
-	oldsize = os.stat(filepath).st_size
+	# this is the size in bits
+	size = os.stat(filepath).st_size
+	# kb_size = oldsize/1000
+	mb = round(size / (1024 * 1024), 3)
+	max_mbs = 2.0
 
-	kb_size = oldsize/1000
-	max_kbs = 2000
+	# print("kb size:", kb_size)	
 
-	print("kb size:", kb_size)
-	
-	
+	print("mb size:", mb)
 
 	picture = Image.open(filepath)
+	# https://stackoverflow.com/questions/400788/resize-image-in-python-without-losing-exif-data
+	exif = picture.info['exif']
+# Your picture process here
 
-	if kb_size > max_kbs:
-		ratio = (max_kbs/kb_size)
-		print(kb_size)
+	if mb > max_mbs:
+		ratio = (max_mbs/mb)
+		print(ratio)
+		quality = 70
 
-		quality = ratio * 100
 		print('quality should be the following')
 		print(quality)
 	else:
-		quality = 85
+		quality = 70
 		
 	#dim = picture.size
 	
 	#set quality= to the preferred quality. 
 	#I found that 85 has no difference in my 6-10mb files and that 65 is the lowest reasonable number
+	# picture = picture.rotate(90)
 	newPath = os.path.join(os.getcwd(), 'compressedFiles', 'compressed_' + file)
-	picture.save(newPath,"JPEG",optimize=True,quality=math.floor(quality)) 
+	picture.save(newPath,"JPEG",optimize=True,quality=quality,  exif=exif)
 	
-	#change the "compressed_+file" to be something else if I want
-	newsize = os.stat(os.path.join(os.getcwd(),'originalFiles', file)).st_size
-	percent = (oldsize-newsize)/float(oldsize)*100
-	if (verbose):
-		print( "File compressed from {0} to {1} or {2}%".format(oldsize,newsize,percent))
-	return percent
+
+	
+	return 0
 
 def main():
 	verbose = False
